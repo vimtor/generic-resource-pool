@@ -22,10 +22,10 @@ If you want to use the Redis driver, you will need to install `ioredis`:
 npm i ioredis
 ```
 
-If you want to use the DynamoDB driver, you will need to install `aws-sdk`:
+If you want to use the DynamoDB driver, you will need to install `@aws-sdk/client-dynamodb`:
 
 ```bash
-npm i aws-sdk
+npm i @aws-sdk/client-dynamodb
 ```
 
 ## Usage
@@ -98,7 +98,7 @@ const pool = new ResourcePool({
 
 ### DynamoDB
 
-The DynamoDB driver uses [aws-sdk](https://github.com/aws/aws-sdk-js) to lock resources. The driver accepts a configuration object or an existing DynamoDB client along with the table name. If the table does not exist, it will be created automatically.
+The DynamoDB driver uses [@aws-sdk/client-dynamodb](https://github.com/aws/aws-sdk-js-v3) to lock resources. The driver accepts a configuration object or an existing DynamoDB client along with the table name. If the table does not exist, it will be created automatically.
 
 ```typescript
 import { ResourcePool } from 'generic-resource-pool';

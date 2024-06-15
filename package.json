@@ -37,18 +37,17 @@
     "prettier": "^3.3.2",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0",
-    "@types/aws-sdk": "^2.7.0"
+    "vitest": "^1.6.0"
   },
   "peerDependencies": {
     "ioredis": "^5",
-    "aws-sdk": "^2"
+    "@aws-sdk/client-dynamodb": "^3"
   },
   "peerDependenciesMeta": {
     "ioredis": {
       "optional": true
     },
-    "aws-sdk": {
+    "@aws-sdk/client-dynamodb": {
       "optional": true
     }
   }

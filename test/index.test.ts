@@ -14,7 +14,7 @@ const drivers = {
       credentials: {
         accessKeyId: "fake",
         secretAccessKey: "fake",
-      }
+      },
     },
     "locks",
   ),
@@ -22,11 +22,13 @@ const drivers = {
 
 Object.entries(drivers).forEach(([name, driver]) => {
   test(name, async () => {
+    const expires = 600;
+
     const pool = new ResourcePool({
       driver,
       resources: [1, 2, 3],
       key: (resource) => resource.toString(),
-      expires: 2000,
+      expires,
       shuffle: false,
     });
 
@@ -39,10 +41,10 @@ Object.entries(drivers).forEach(([name, driver]) => {
     resource = await pool.acquire();
     expect(resource).toEqual(3);
 
-    resource = await pool.acquire({ timeout: 500 });
+    resource = await pool.acquire({ timeout: expires / 2 });
     expect(resource).toEqual(null);
 
-    resource = await pool.acquire({ timeout: 500 });
+    resource = await pool.acquire({ timeout: expires / 2 });
     expect(resource).toEqual(1);
 
     resource = await pool.acquire();
@@ -51,10 +53,10 @@ Object.entries(drivers).forEach(([name, driver]) => {
     resource = await pool.acquire();
     expect(resource).toEqual(3);
 
-    resource = await pool.acquire({ timeout: 1000 });
+    resource = await pool.acquire({ timeout: expires });
     expect(resource).toEqual(1);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, expires));
 
     resource = await pool.acquire();
     expect(resource).toEqual(1);
