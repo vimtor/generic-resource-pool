@@ -33,7 +33,7 @@
     "url": "https://github.com/vimtor/generic-resource-pool.git"
   },
   "scripts": {
-    "build": "tsup src/** --minify --format cjs,esm --dts --sourcemap",
+    "build": "tsup src/** --minify --format cjs,esm --dts --sourcemap --clean --splitting",
     "test": "vitest run",
     "prepublishOnly": "pnpm run build",
     "format": "prettier --write ."
