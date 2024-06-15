@@ -26,7 +26,7 @@ Object.entries(drivers).forEach(([name, driver]) => {
       driver,
       resources: [1, 2, 3],
       key: (resource) => resource.toString(),
-      expires: 1000,
+      expires: 2000,
       shuffle: false,
     });
 
