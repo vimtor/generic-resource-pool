@@ -11,6 +11,10 @@ const drivers = {
     {
       endpoint: "http://localhost:8000",
       region: "us-west-2",
+      credentials: {
+        accessKeyId: "fake",
+        secretAccessKey: "fake",
+      }
     },
     "locks",
   ),
