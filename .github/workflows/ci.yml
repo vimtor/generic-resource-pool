@@ -41,8 +41,11 @@ jobs:
       - name: Install pnpm
         run: npm i -g pnpm
 
-      - name: Install deps
+      - name: Install dependencies
         run: pnpm i
+
+      - name: Docker Compose
+        uses: hoverkraft-tech/compose-action@v1.5.1
 
       # Runs a set of commands using the runners shell
       - name: Build and Test
