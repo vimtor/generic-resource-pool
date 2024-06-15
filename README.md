@@ -2,7 +2,7 @@
 
 Atomically access any collection of objects.
 
-[![npm version](https://badgen.net/npm/v/generic-resource-pool)](https://npm.im/generic-resource-pool) [![npm downloads](https://badgen.net/npm/dm/generic-resource-pool)](https://npm.im/generic-resource-pool)
+[![npm version](https://badgen.net/npm/v/generic-resource-pool)](https://npm.im/generic-resource-pool) [![npm downloads](https://badgen.net/npm/dm/generic-resource-pool)](https://npm.im/generic-resource-pool) [![CI](https://github.com/vimtor/generic-resource-pool/actions/workflows/ci.yml/badge.svg)](https://github.com/vimtor/generic-resource-pool/actions/workflows/ci.yml)
 
 ## Motivation
 
@@ -38,18 +38,23 @@ const users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
 
 const pool = new ResourcePool({
   driver: new RedisDriver({ host: 'localhost', port: 6379 }),
-  resources: users, // Array of resources in the pool,
-  key: (user) => user.id, // Function that returns a unique key for each resource,
-  expires: 1000, // Time in milliseconds before a lock expires (also accepts a function that returns a number given the resource),
-  shuffle: true, // Shuffle the resources before trying to acquire a lock (default: true),
+  resources: users,
+  key: (user) => user.id,
+  expires: 1000,
+  interval: 500,
+  shuffle: true,
 });
 
-const user = await pool.acquire({ timeout: 5000 }); // optionally pass a timeout in milliseconds
+const user = await pool.acquire({ timeout: 5000 });
 if (user) {
-  // do something with the user
-  await pool.release(user); // also, it releases the lock automatically after the `expires` option value
+  // Do something with the user
+  
+  // Optionally release the user back to the pool
+  await pool.release(user); 
 }
 ```
+
+You can find more details in the [API](#API) section.
 
 ## Drivers
 
@@ -118,14 +123,16 @@ const pool = new ResourcePool({
 
 - `options.driver: LockDriver` - The driver to use for the locking mechanism.
 - `options.resources: T[]` - Array of resources in the pool.
-- `options.key: (resource: T) => string` - Function that returns a unique key for each resource.
-- `options.expires: number | ((resource: T) => number)` - Time in milliseconds before a lock expires (also accepts a function that returns a number given the resource).
+- `options.key: (resource: T) => string | Promise<string>` - Function that returns a unique key for each resource.
+- `options.expires: number | ((resource: T) => number | Promise<number>)` - Time in milliseconds before a lock expires (also accepts a function that returns a number given the resource).
+- `options.interval: number | undefined` - Time in milliseconds between retries when trying to acquire a lock (default: 500).
 - `options.shuffle: boolean | undefined` - Shuffle the resources before trying to acquire a lock (default: true).
 
-### `pool.acquire(options: AcquireOptions): Promise<T | null>`
+#### `pool.acquire(options: AcquireOptions): Promise<T | null>`
 - `options.timeout: number | undefined` - Timeout in milliseconds to wait for a resource to become available. If undefined, it will only try once. (default: undefined).
+- Returns a promise that resolves to the acquired resource or `null` if the timeout is reached.
 
-### `pool.release(resource: T): Promise<boolean>`
+#### `pool.release(resource: T): Promise<boolean>`
 - `resource: T` - The resource to release.
 - Returns a promise that resolves to `true` if the resource was released successfully, `false` otherwise.
 

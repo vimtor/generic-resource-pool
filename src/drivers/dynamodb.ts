@@ -30,6 +30,7 @@ export class DynamoDBDriver implements LockDriver {
           ":now": { N: Date.now().toString() },
         },
       });
+
       return true;
     } catch (error) {
       if (error instanceof ConditionalCheckFailedException) {

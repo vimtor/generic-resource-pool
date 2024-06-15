@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { afterAll, expect, test } from "vitest";
 import { ResourcePool } from "../src";
 import { MemoryDriver } from "../src/drivers/memory";
 import { RedisDriver } from "../src/drivers/redis";
@@ -20,13 +20,26 @@ const drivers = {
   ),
 };
 
-Object.entries(drivers).forEach(([name, driver]) => {
-  test(name, async () => {
-    const expires = 600;
+const expires = 1000;
 
+const resources = [1, 2, 3];
+
+afterAll(async () => {
+  await Promise.all(
+    Object.values(drivers).map(async (driver) => {
+      for (const resource of resources) {
+        await driver.unlock(resource.toString());
+      }
+    }),
+  );
+});
+
+Object.entries(drivers).forEach(([name, driver]) => {
+  test.concurrent(name, async () => {
     const pool = new ResourcePool({
       driver,
-      resources: [1, 2, 3],
+      resources,
+      interval: expires / 2,
       key: (resource) => resource.toString(),
       expires,
       shuffle: false,

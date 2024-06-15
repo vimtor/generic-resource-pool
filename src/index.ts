@@ -9,6 +9,7 @@ export interface ResourcePoolOptions<Resource> {
   resources: Resource[];
   key: (resource: Resource) => string | Promise<string>;
   expires: number | ((resource: Resource) => number | Promise<number>);
+  interval?: number;
   shuffle?: boolean;
 }
 
@@ -17,21 +18,23 @@ export class ResourcePool<Resource> {
   private readonly resources: Resource[];
   private readonly key: (resource: Resource) => Promise<string>;
   private readonly expires: (resource: Resource) => Promise<number>;
+  private readonly interval: number;
   private readonly shuffle: boolean;
 
   constructor(options: ResourcePoolOptions<Resource>) {
     this.driver = options.driver;
     this.resources = options.resources;
     this.shuffle = options.shuffle ?? true;
+    this.interval = options.interval ?? 500;
     this.key = async (resource: Resource) => {
       return options.key(resource);
-    }
+    };
     this.expires = async (resource: Resource) => {
       if (typeof options.expires === "function") {
         return options.expires(resource);
       }
       return options.expires;
-    }
+    };
   }
 
   public async release(resource: Resource) {
@@ -82,7 +85,7 @@ export class ResourcePool<Resource> {
       }
 
       await new Promise((resolve) =>
-        setTimeout(resolve, Math.min(remaining, 100)),
+        setTimeout(resolve, Math.min(remaining, this.interval)),
       );
     }
 
