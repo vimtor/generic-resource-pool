@@ -1,6 +1,6 @@
 {
   "name": "generic-resource-pool",
-  "version": "0.0.0",
+  "version": "0.0.0-semantic-release",
   "description": "Atomically access any object array",
   "publishConfig": {
     "access": "public"
@@ -26,13 +26,18 @@
       "import": "./dist/drivers/dynamodb.mjs"
     }
   },
+  "author": "vimtor",
+  "license": "MIT",
+  "homepage": "https://github.com/vimtor/generic-resource-pool",
+  "repository": {
+    "url": "https://github.com/vimtor/generic-resource-pool.git"
+  },
   "scripts": {
     "build": "tsup src/** --minify --format cjs,esm --dts --sourcemap",
     "test": "vitest run",
     "prepublishOnly": "pnpm run build",
     "format": "prettier --write ."
   },
-  "license": "MIT",
   "devDependencies": {
     "prettier": "^3.3.2",
     "tsup": "^8.1.0",
@@ -50,5 +55,9 @@
     "@aws-sdk/client-dynamodb": {
       "optional": true
     }
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@8.10.0"
 }
