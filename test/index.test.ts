@@ -22,13 +22,11 @@ const drivers = {
 
 Object.entries(drivers).forEach(([name, driver]) => {
   test(name, async () => {
-    const expires = Math.floor(Math.random() * 1000 + 100);
-
     const pool = new ResourcePool({
       driver,
       resources: [1, 2, 3],
       key: (resource) => resource.toString(),
-      expires,
+      expires: 1000,
       shuffle: false,
     });
 
@@ -41,10 +39,10 @@ Object.entries(drivers).forEach(([name, driver]) => {
     resource = await pool.acquire();
     expect(resource).toEqual(3);
 
-    resource = await pool.acquire({ timeout: expires / 2 });
+    resource = await pool.acquire({ timeout: 500 });
     expect(resource).toEqual(null);
 
-    resource = await pool.acquire({ timeout: expires / 2 });
+    resource = await pool.acquire({ timeout: 500 });
     expect(resource).toEqual(1);
 
     resource = await pool.acquire();
@@ -53,10 +51,10 @@ Object.entries(drivers).forEach(([name, driver]) => {
     resource = await pool.acquire();
     expect(resource).toEqual(3);
 
-    resource = await pool.acquire({ timeout: expires });
+    resource = await pool.acquire({ timeout: 1000 });
     expect(resource).toEqual(1);
 
-    await new Promise((resolve) => setTimeout(resolve, expires));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     resource = await pool.acquire();
     expect(resource).toEqual(1);

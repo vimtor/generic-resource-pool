@@ -8,15 +8,15 @@ services:
       - "8000:8000"
     volumes:
       - dynamodb-data:/data
-  redis:
-    container_name: redis
-    image: redis:latest
-    environment:
-        REDIS_PASSWORD: password
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
+#  redis:
+#    container_name: redis
+#    image: redis:latest
+#    environment:
+#        REDIS_PASSWORD: password
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - redis-data:/data
 
 volumes:
   dynamodb-data:
