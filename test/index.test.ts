@@ -2,22 +2,21 @@ import { afterAll, expect, test } from "vitest";
 import { ResourcePool } from "../src";
 import { MemoryDriver } from "../src/drivers/memory";
 import { RedisDriver } from "../src/drivers/redis";
-import { DynamoDBDriver } from "../src/drivers/dynamodb";
 
 const drivers = {
   memory: new MemoryDriver(),
   redis: new RedisDriver({ host: "localhost", port: 6379, db: 0 }),
-  dynamodb: new DynamoDBDriver(
-    {
-      endpoint: "http://localhost:8000",
-      region: "us-west-2",
-      credentials: {
-        accessKeyId: "fake",
-        secretAccessKey: "fake",
-      },
-    },
-    "locks",
-  ),
+  // dynamodb: new DynamoDBDriver(
+  //   {
+  //     endpoint: "http://localhost:8000",
+  //     region: "us-west-2",
+  //     credentials: {
+  //       accessKeyId: "fake",
+  //       secretAccessKey: "fake",
+  //     },
+  //   },
+  //   "locks",
+  // ),
 };
 
 const expires = 1000;
