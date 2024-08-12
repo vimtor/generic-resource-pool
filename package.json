@@ -38,11 +38,17 @@
     "prepublishOnly": "pnpm run build",
     "format": "prettier --write ."
   },
+  "dependencies": {
+    "lodash.shuffle": "^4.2.0",
+    "lodash.range": "^3.2.0"
+  },
   "devDependencies": {
     "prettier": "^3.3.2",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "@types/lodash.shuffle": "^4.2.9",
+    "@types/lodash.range": "^3.2.9"
   },
   "peerDependencies": {
     "ioredis": "^5",

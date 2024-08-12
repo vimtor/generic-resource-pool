@@ -1,3 +1,6 @@
+import range from "lodash.range";
+import shuffle from "lodash.shuffle";
+
 export interface LockDriver {
   lock(key: string, expires: number): Promise<boolean>;
 
@@ -44,9 +47,9 @@ export class ResourcePool<Resource> {
 
   public async acquire(options?: { timeout?: number }) {
     const find = async () => {
-      const indices = Array.from(this.resources.keys());
+      let indices = range(this.resources.length);
       if (this.shuffle) {
-        indices.sort(() => Math.random() - 0.5);
+        indices = shuffle(indices);
       }
 
       for (const i of indices) {
